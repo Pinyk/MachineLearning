@@ -1,5 +1,4 @@
 package apriori;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.util.Set;
  * @Author: gaoyk
  * @Date: 2020/11/13 8:49
  */
+
 public class Apriori {
 
     private double support;
@@ -27,7 +27,6 @@ public class Apriori {
 
     }
     public Apriori(double support, double confidence) {
-        super();
         this.support = support;
         this.confidence = confidence;
     }
@@ -55,7 +54,7 @@ public class Apriori {
      * @return
      */
     public Map<String,Integer> oneFrequentSet(List<String> recordList){
-        Map<String,Integer> freOne=new HashMap<String,Integer>();
+        Map<String,Integer> freOne=new HashMap<>();
         if(recordList!=null&&recordList.size()>0){
             for(String record:recordList){
                 String items[]=record.split(ITEMSPLITE);
@@ -78,7 +77,7 @@ public class Apriori {
      * @param size
      */
     public Map<String,Integer> getSupportedItemSets(Map<String,Integer> rawItemSets,int size){
-        Map<String,Integer> supportedItemSets=new HashMap<String,Integer>();
+        Map<String,Integer> supportedItemSets=new HashMap<>();
         for(Entry<String,Integer> entry:rawItemSets.entrySet()){
             if(entry.getValue()*1.0>support*size){
                 supportedItemSets.put(entry.getKey(),entry.getValue());
@@ -97,7 +96,7 @@ public class Apriori {
      * @return
      */
     public Map<String,Integer> getNextCandidate(Map<String,Integer> frequentSets){
-        Map<String,Integer> candidateFrequentSets=new HashMap<String,Integer>();
+        Map<String,Integer> candidateFrequentSets=new HashMap<>();
         List<String> freSets1=mapKeyToList(frequentSets);
         List<String> freSets2=mapKeyToList(frequentSets);
         //System.out.println(freSets1+"\n"+freSets2);
@@ -161,7 +160,7 @@ public class Apriori {
      * @return
      */
     public List<String> mapKeyToList(Map<String, Integer> map) {
-        List<String> list=new ArrayList<String>();
+        List<String> list=new ArrayList<>();
         if(map.size()!=0){
             Set<String> set=map.keySet();
             for(String s:set){
@@ -232,52 +231,52 @@ public class Apriori {
     }
 
     public Map<String,Integer> apriori(List<String> srcData) throws IOException{
-        Map<String,Integer> freSets=new HashMap<String,Integer>();
-        Map<String,Integer> candidateFreSets=new HashMap<String,Integer>();
+        Map<String,Integer> freSets=new HashMap<>();
+        Map<String,Integer> candidateFreSets=new HashMap<>();
 
         int len=srcData.size();
 
         Map<String,Integer> oneFreSets=oneFrequentSet(srcData);//获取项集为1的集合
-		/*System.out.println("--------------------初始频繁1项项集-----------------------------");
+		System.out.println("--------------------初始频繁1项项集-----------------------------");
 		for(Entry<String, Integer> entry:oneFreSets.entrySet()){
 			System.out.println(entry.getKey()+":"+entry.getValue());
-		}*/
+		}
 
         oneFreSets=getSupportedItemSets(oneFreSets, len);//第一次进行清理不符合支持度的项集
-		/*System.out.println("--------------------初始频繁1项项集支持度检查-----------------------------");
+		System.out.println("--------------------初始频繁1项项集支持度检查-----------------------------");
 		for(Entry<String, Integer> entry:oneFreSets.entrySet()){
 			System.out.println(entry.getKey()+":"+entry.getValue());
-		}*/
+		}
         int i=1;
         while(oneFreSets!=null&&oneFreSets.size()>0){
-            freSets=union(freSets,oneFreSets);          //合并上一次所求满足支持度的项集，会不会重复？
+            freSets=union(freSets,oneFreSets);          //合并上一次所求满足支持度的项集，会不会重复
 
             //由k项项集找k+1项项集
-		/*	System.out.println("--------------------初始频繁项集第"+i+"次合并的结果-----------------------------");
+			System.out.println("--------------------初始频繁项集第"+i+"次合并的结果-----------------------------");
 			for(Entry<String, Integer> entry:freSets.entrySet()){
 				System.out.println(entry.getKey()+":"+entry.getValue());
-			}*/
+			}
             i++;
             candidateFreSets=getNextCandidate(oneFreSets);
-			/*System.out.println("--------------------组合的"+i+"项结果-----------------------------");
-			for(Entry<String, Integer> entry:candidateFreSets.entrySet()){
-				System.out.println(entry.getKey()+":"+entry.getValue());
-			}*/
-            //对候选组合的k+1项项集进行统计
-            countCandidateFreqSet(candidateFreSets, srcData);
-		/*	System.out.println("--------------------组合支持度计算结果-----------------------------");
+			System.out.println("--------------------组合的"+i+"项结果-----------------------------");
 			for(Entry<String, Integer> entry:candidateFreSets.entrySet()){
 				System.out.println(entry.getKey()+":"+entry.getValue());
 			}
-			*/
+            //对候选组合的k+1项项集进行统计
+            countCandidateFreqSet(candidateFreSets, srcData);
+			System.out.println("--------------------组合支持度计算结果-----------------------------");
+			for(Entry<String, Integer> entry:candidateFreSets.entrySet()){
+				System.out.println(entry.getKey()+":"+entry.getValue());
+			}
+
             //筛选满足支持度的项集，赋值给oneFreSets
             oneFreSets=getSupportedItemSets(candidateFreSets, len);
-			/*if(oneFreSets!=null){
+			if(oneFreSets!=null){
 				System.out.println("--------------------频繁项集（"+i+"项）支持度筛选的结果-----------------------------");
 				for(Entry<String, Integer> entry:oneFreSets.entrySet()){
 					System.out.println(entry.getKey()+":"+entry.getValue());
 				}
-			}*/
+			}
         }
 
         return freSets;
@@ -289,7 +288,7 @@ public class Apriori {
      * @param oneFreSets
      */
     public Map<String, Integer> union(Map<String, Integer> freSets, Map<String, Integer> oneFreSets) {
-        Map<String,Integer> tmp=new HashMap<String,Integer>();
+        Map<String,Integer> tmp=new HashMap<>();
         for(Entry<String, Integer> entry:freSets.entrySet()){
             tmp.put(entry.getKey(), entry.getValue());
         }
@@ -312,10 +311,10 @@ public class Apriori {
      * @return
      */
     public Map<String,Double> getRelation(Map<String,Integer> freSets,List<String> data){
-        Map<String,Double> results=new HashMap<String,Double>();   //规则结果：（关联规则，置信度）
+        Map<String,Double> results=new HashMap<>();   //规则结果：（关联规则，置信度）
         List<String> freKeys=mapKeyToList(freSets);          //频繁项集
         System.out.println(freKeys);
-        List<String> subSets=new ArrayList<String>();
+        List<String> subSets=new ArrayList<>();
         String front="",end="";
         for(String freRecord:freKeys){
             System.out.println("\n-------------------------频繁项集------------------\n"+freRecord);
@@ -323,14 +322,14 @@ public class Apriori {
             System.out.println("------------------真子集-----------------\n"+subSets);
             for(int i=0;i<subSets.size();i++){
                 front=subSets.get(i);
-                System.out.println("前置："+front+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                System.out.println("前置：是"+front+"的时候");
                 for(int j=0;j<subSets.size();j++){
                     end=subSets.get(j);
-                    if(!(isIntersected(front,end))){  //前置条件和后置条件不可以有交集
+                    if(!(isIntersected(front,end))){
                         double confidenceTest=getRealConfidence(data,subSets.get(i),subSets.get(j));
                         System.out.println("前置--->后置："+front+"--->"+end+" : "+confidenceTest);
                         if(confidenceTest>confidence){
-                            System.out.println("put:("+front+","+end+")");
+                            System.out.println("该结果满足置信度:("+front+","+end+")");
                             results.put(subSets.get(i)+"--->"+subSets.get(j),confidenceTest);
                         }
 
@@ -358,7 +357,8 @@ public class Apriori {
      * @param subSets
      * @param data
      * @return
-     *//*
+     */
+    /*
 	public Map<String, Integer> getSubSetSupport(List<String> subSets,List<String> data) {
 		Map<String, Integer> map=new HashMap<String, Integer>();
 		if(subSets==null||subSets.size()==0)
@@ -374,7 +374,7 @@ public class Apriori {
      * @return
      */
     public List<String> getSubSets(String str){
-        List<String> subSets=new ArrayList<String>();
+        List<String> subSets=new ArrayList<>();
         String[] items=str.split(ITEMSPLITE);
         int len=items.length;
         String item="";
@@ -388,11 +388,13 @@ public class Apriori {
                 tmp/=2;
             }while(tmp>0);
 
+//            System.out.println("拆分x" + flag);
             for(int j=0;j<flag.length();j++){
                 if(flag.charAt(j)=='1'){
                     item+=items[j]+ITEMSPLITE;
                 }
             }
+//            System.out.println("拆分y" + item);
             subSets.add(item);
         }
         return subSets;

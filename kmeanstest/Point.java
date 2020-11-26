@@ -69,15 +69,4 @@ public class Point {
         }
         return true;
     }
-
-    @Override
-    public int hashCode() {
-        float x = localArray[0];
-        float y = localArray[localArray.length - 1];
-        long temp = x != +0.0d ? Double.doubleToLongBits(x) : 0L;
-        int result = (int) (temp ^ (temp >>> 32));
-        temp = y != +0.0d ? Double.doubleToLongBits(y) : 0L;
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
 }

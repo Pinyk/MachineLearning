@@ -6,11 +6,11 @@ import java.util.Set;
 /**
  * @Author: gaoyk
  * @Date: 2020/11/26 15:38
+ * 主程序入口
  */
 public class Main {
     public static void main(String[] args) {
-        ArrayList<float[]> dataSet = new ArrayList<float[]>();
-
+        ArrayList<float[]> dataSet = new ArrayList<>();
         dataSet.add(new float[] { 1, 2, 3 });
         dataSet.add(new float[] { 3, 3, 3 });
         dataSet.add(new float[] { 3, 4, 4});
@@ -24,6 +24,7 @@ public class Main {
         dataSet.add(new float[] { 1, 9, 12});
         dataSet.add(new float[] { 7, 8, 112});
         dataSet.add(new float[] { 7, 8, 4});
+        dataSet.add(new float[] { 12, 15, 100});
 
         KMeansRun kRun =new KMeansRun(3, dataSet);
 
@@ -33,5 +34,4 @@ public class Main {
             System.out.println(cluster);
         }
     }
-
 }

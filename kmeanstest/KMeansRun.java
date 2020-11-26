@@ -48,6 +48,7 @@ public class KMeansRun {
         pointList = new ArrayList<Point>();
         for (int i = 0, j = original_data.size(); i < j; i++){
             pointList.add(new Point(i, original_data.get(i)));
+//            System.out.println(pointList);
         }
     }
 
@@ -114,6 +115,7 @@ public class KMeansRun {
             // 所有点，对应各个维度进行求和
             for (int i = 0; i < len; i++) {
                 for (int j = 0; j < point_list.size(); j++) {
+                    //每个点的每个维度相加
                     sumAll[i] += point_list.get(j).getlocalArray()[i];
                 }
             }
@@ -138,7 +140,7 @@ public class KMeansRun {
         Set<Cluster> clusterSet= chooseCenterCluster();
         boolean ifNeedIter = true;
         while (ifNeedIter) {
-            cluster(clusterSet);
+            cluster(clusterSet);    //聚类
             ifNeedIter = calculateCenter(clusterSet);
             iterRunTimes ++ ;
         }
